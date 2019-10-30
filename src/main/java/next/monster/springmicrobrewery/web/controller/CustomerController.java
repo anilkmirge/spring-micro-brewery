@@ -28,7 +28,7 @@ public class CustomerController {
   public ResponseEntity<CustomerDto> handlePost(@RequestBody CustomerDto customer) {
     CustomerDto savedCustomer = customerService.saveNewCustomer(customer);
     HttpHeaders headers = new HttpHeaders();
-    headers.add("Location", "/api/v1/customer/" + customer.getId().toString());
+    headers.add("Location", "/api/v1/customer/" + savedCustomer.getId().toString());
     return new ResponseEntity<>(headers, HttpStatus.CREATED);
   }
 
