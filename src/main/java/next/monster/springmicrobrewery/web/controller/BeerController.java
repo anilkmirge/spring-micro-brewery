@@ -1,5 +1,6 @@
 package next.monster.springmicrobrewery.web.controller;
 
+import javax.validation.Valid;
 import next.monster.springmicrobrewery.services.BeerService;
 import next.monster.springmicrobrewery.web.model.BeerDto;
 import org.springframework.http.HttpHeaders;
@@ -26,7 +27,7 @@ public class BeerController {
   }
 
   @PostMapping
-  public ResponseEntity handlePost(@RequestBody BeerDto beer) {
+  public ResponseEntity handlePost(@Valid @RequestBody BeerDto beer) {
     BeerDto savedBeer = beerService.saveNewBeer(beer);
     HttpHeaders headers = new HttpHeaders();
     // todo add hostname to url
@@ -35,7 +36,7 @@ public class BeerController {
   }
 
   @PutMapping("/{beerId}")
-  public ResponseEntity handleUpdate(@PathVariable("beerId") UUID beerId, @RequestBody BeerDto beer) {
+  public ResponseEntity handleUpdate(@PathVariable("beerId") UUID beerId, @Valid @RequestBody BeerDto beer) {
     beerService.updateBeer(beerId, beer);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }

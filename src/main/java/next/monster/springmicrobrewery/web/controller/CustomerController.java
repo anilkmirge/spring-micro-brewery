@@ -1,5 +1,9 @@
 package next.monster.springmicrobrewery.web.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import next.monster.springmicrobrewery.services.CustomerService;
 import next.monster.springmicrobrewery.web.model.CustomerDto;
 import org.springframework.http.HttpHeaders;
@@ -25,7 +29,7 @@ public class CustomerController {
   }
 
   @PostMapping
-  public ResponseEntity<CustomerDto> handlePost(@RequestBody CustomerDto customer) {
+  public ResponseEntity<CustomerDto> handlePost(@Valid @RequestBody CustomerDto customer) {
     CustomerDto savedCustomer = customerService.saveNewCustomer(customer);
     HttpHeaders headers = new HttpHeaders();
     headers.add("Location", "/api/v1/customer/" + savedCustomer.getId().toString());
@@ -34,13 +38,13 @@ public class CustomerController {
 
   @PutMapping("/{customerId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void handleUpdate(@PathVariable("customerId") UUID customerId, @RequestBody CustomerDto customer) {
+  public void handleUpdate(@PathVariable("customerId") UUID customerId, @Valid @RequestBody CustomerDto customer) {
     customerService.updateCustomer(customerId, customer);
   }
 
   @DeleteMapping("/{customerId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteCustomer(@PathVariable("customerId") UUID customerId) {
+  public void deleteCustomerById(@PathVariable("customerId") UUID customerId) {
     customerService.deleteById(customerId);
   }
 }

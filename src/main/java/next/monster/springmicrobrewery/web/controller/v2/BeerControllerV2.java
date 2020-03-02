@@ -1,5 +1,9 @@
 package next.monster.springmicrobrewery.web.controller.v2;
 
+import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import next.monster.springmicrobrewery.services.v2.BeerServiceV2;
 import next.monster.springmicrobrewery.web.model.v2.BeerDtoV2;
 import org.springframework.http.HttpHeaders;
@@ -9,14 +13,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+@Slf4j
+@RequiredArgsConstructor
 @RequestMapping("/api/v2/beer")
 @RestController
 public class BeerControllerV2 {
   private final BeerServiceV2 beerServiceV2;
-
-  public BeerControllerV2(BeerServiceV2 beerServiceV2) {
-    this.beerServiceV2 = beerServiceV2;
-  }
 
   @GetMapping("/{beerId}")
   public ResponseEntity<BeerDtoV2> getBeer(@PathVariable("beerId") UUID beerId) {
@@ -24,16 +26,17 @@ public class BeerControllerV2 {
   }
 
   @PostMapping
-  public ResponseEntity handlePost(@RequestBody BeerDtoV2 beer) {
-    BeerDtoV2 savedBeer = beerServiceV2.saveNewBeer(beer);
-    HttpHeaders headers = new HttpHeaders();
+  public ResponseEntity handlePost(@Valid @RequestBody BeerDtoV2 beer) {
+    log.debug("in handle post...");
+    val savedBeer = beerServiceV2.saveNewBeer(beer);
+    var headers = new HttpHeaders();
     // todo add hostname to url
     headers.add("Location  ", "/api/v2/beer/" + savedBeer.getId().toString());
     return new ResponseEntity(headers, HttpStatus.CREATED);
   }
 
   @PutMapping("/{beerId}")
-  public ResponseEntity handleUpdate(@PathVariable("beerId") UUID beerId, @RequestBody BeerDtoV2 beer) {
+  public ResponseEntity handleUpdate(@PathVariable("beerId") UUID beerId, @Valid @RequestBody BeerDtoV2 beer) {
     beerServiceV2.updateBeer(beerId, beer);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
