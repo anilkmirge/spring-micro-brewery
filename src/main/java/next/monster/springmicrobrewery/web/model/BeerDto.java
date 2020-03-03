@@ -1,5 +1,6 @@
 package next.monster.springmicrobrewery.web.model;
 
+import java.time.OffsetDateTime;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Positive;
@@ -27,4 +28,8 @@ public class BeerDto {
 
   @Positive
   private Long upc;
+
+  private OffsetDateTime createdDate;
+
+  private OffsetDateTime lastUpdatedDate;
 }
